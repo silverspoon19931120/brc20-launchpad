@@ -1,0 +1,195 @@
+.table:nth-child(even) {
+  background-color: #23232b;
+}
+
+@media screen and (max-width: 600px) {
+  .table {
+    display: none;
+
+  }
+
+  .box {
+    display: flex;
+    flex-direction: column;
+    background: #21242e;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .body {
+    width: 100%;
+  }
+
+  .box .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+  }
+
+  .box .body>.first {
+    display: flex;
+    align-items: center;
+
+  }
+
+  .first label {
+    width: 40%;
+  }
+
+  .first .p {
+    flex: 1;
+  }
+
+  .priceColor {
+    color: #16C784;
+
+  }
+
+  .token {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .supply {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .supply span {
+    color: #F38010;
+    margin-left: 3px;
+  }
+
+  .relativeDiv {
+    position: relative;
+  }
+
+  .absoluteOne {
+    position: absolute;
+    bottom: 5px;
+    background: #9B9BB04D;
+    height: 6px;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  .absoluteTwo {
+    position: absolute;
+    bottom: 5px;
+    background: #9B9BB0;
+    height: 6px;
+    border-radius: 5px;
+    width: 90%;
+  }
+
+  .search {
+    background: red;
+  }
+
+  .marketCap {
+    font-size: 11;
+    display: none;
+  }
+
+  .airdrop {
+    display: none;
+  }
+  .search-container{
+    display: flex;
+flex-direction: column-reverse;
+margin-bottom: -50px;
+
+  }
+  .filter span{
+    display: none;
+  }
+  .sub-heading{
+    display:flex;
+    font-size: 17px;
+  }
+  .sub-heading span{
+    color: #F38010;
+    margin-left: 4px;
+  }
+  .heading{
+    display:flex;
+    font-size: 18px;
+    margin-top: 100px;
+  }
+  .heading span{
+    color: #F38010;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+  .botAbsolute{
+    position: absolute;
+    top:0;
+    right:10px;
+    z-index: 10000;
+    width: 150px;
+    height:auto;
+  }
+  .connectButton{
+    display: none;
+  }
+  .desktopLink{
+    display: none;
+  }
+  .menu{
+    margin-right: 10px;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .menu{
+    display: none;
+  }
+  .desktopLink{
+    display: flex;
+  }
+  .connectButton{
+    outline: none;
+    border: none;
+    background: #F38010;
+    padding: 5px 10px;
+    border-radius: 5px
+  }
+  .botAbsolute{
+   display: none;
+  }
+  .sub-heading{
+    display:none;
+  }
+  .heading{
+    display:none;
+  }
+  .box {
+    display: none;
+
+  }
+
+  .marketCap {
+    font-size: 11;
+    display: block;
+  }
+
+  .airdrop {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 50px;
+  }
+  .search-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 50px;
+  }
+}

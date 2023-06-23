@@ -1,0 +1,82 @@
+import graphql from 'babel-plugin-relay/macro'
+import { DEFAULT_ERC20_DECIMALS } from 'constants/tokens'
+import { useMemo } from 'react'
+import { useLazyLoadQuery } from 'react-relay'
+import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
+
+import { Chain } from './__generated__/TokenPriceQuery.graphql'
+import { TokenQuery, TokenQuery$data } from './__generated__/TokenQuery.graphql'
+import { CHAIN_NAME_TO_CHAIN_ID } from './util'
+
+/*
+The difference between Token and TokenProject:
+  Token: an on-chain entity referring to a contract (e.g. uni token on ethereum 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984)
+  TokenProject: an off-chain, aggregated entity that consists of a token and its bridged tokens (e.g. uni token on all chains)
+  TokenMarket and TokenProjectMarket then are market data entities for the above.
+    TokenMarket is per-chain market data for contracts pulled from the graph.
+    TokenProjectMarket is aggregated market data (aggregated over multiple dexes and centralized exchanges) that we get from coingecko.
+*/
+const tokenQuery = graphql`
+  query TokenQuery($contract: ContractInput!) {
+    tokens(contracts: [$contract]) {
+      id @required(action: LOG)
+      decimals
+      name
+      chain @required(action: LOG)
+      address @required(action: LOG)
+      symbol
+      market(currency: USD) {
+        totalValueLocked {
+          value
+          currency
+        }
+        price {
+          value
+          currency
+        }
+        volume24H: volume(duration: DAY) {
+          value
+          currency
+        }
+        priceHigh52W: priceHighLow(duration: YEAR, highLow: HIGH) {
+          value
+        }
+        priceLow52W: priceHighLow(duration: YEAR, highLow: LOW) {
+          value
+        }
+      }
+      project {
+        description
+        homepageUrl
+        twitterName
+        logoUrl
+        tokens {
+          chain
+          address
+        }
+      }
+    }
+  }
+`
+
+export type TokenQueryData = NonNullable<TokenQuery$data['tokens']>[number]
+
+export function useTokenQuery(address: string, chain: Chain): TokenQueryData | undefined {
+  const contract = useMemo(() => ({ address: address.toLowerCase(), chain }), [address, chain])
+  const token = useLazyLoadQuery<TokenQuery>(tokenQuery, { contract }).tokens?.[0]
+  return token
+}
+
+// TODO: Return a QueryToken from useTokenQuery instead of TokenQueryData to make it more usable in Currency-centric interfaces.
+export class QueryToken extends WrappedTokenInfo {
+  constructor(data: NonNullable<TokenQueryData>) {
+    super({
+      chainId: CHAIN_NAME_TO_CHAIN_ID[data.chain],
+      address: data.address,
+      decimals: data.decimals ?? DEFAULT_ERC20_DECIMALS,
+      symbol: data.symbol ?? '',
+      name: data.name ?? '',
+      logoURI: data.project?.logoUrl ?? undefined,
+    })
+  }
+}

@@ -1,0 +1,6 @@
+# Wanguda
+
+
+yarn
+
+yarn start
